@@ -32,68 +32,68 @@ export function TodosKanban({ todos }: TodosKanbanProps) {
       getItemValue={(item) => item.id}
     >
       <Kanban.Board className="grid auto-rows-fr grid-cols-3">
-        {Object.entries(columns).map(([columnValue, tasks]) => (
-          <TaskColumn key={columnValue} value={columnValue} tasks={tasks} />
+        {Object.entries(columns).map(([columnValue, todos]) => (
+          <TodoColumn key={columnValue} value={columnValue} todos={todos} />
         ))}
       </Kanban.Board>
       <Kanban.Overlay>
         {({ value, variant }) => {
           if (variant === "column") {
-            const tasks = columns[value] ?? [];
+            const todos = columns[value] ?? [];
 
-            return <TaskColumn value={value} tasks={tasks} />;
+            return <TodoColumn value={value} todos={todos} />;
           }
 
-          const task = Object.values(columns)
+          const todo = Object.values(columns)
             .flat()
-            .find((task) => task.id === value);
+            .find((todo) => todo.id === value);
 
-          if (!task) return null;
+          if (!todo) return null;
 
-          return <TaskCard task={task} />;
+          return <TodoCard todo={todo} />;
         }}
       </Kanban.Overlay>
     </Kanban.Root>
   );
 }
 
-interface TaskCardProps
+interface TodoCardProps
   extends Omit<React.ComponentProps<typeof Kanban.Item>, "value"> {
-  task: Todo;
+  todo: Todo;
 }
 
-function TaskCard({ task, ...props }: TaskCardProps) {
+function TodoCard({ todo, ...props }: TodoCardProps) {
   return (
-    <Kanban.Item key={task.id} value={task.id} asChild {...props}>
+    <Kanban.Item key={todo.id} value={todo.id} asChild {...props}>
       <div className="rounded-md border bg-card p-3 shadow-xs">
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-2">
             <span className="line-clamp-1 font-medium text-sm">
-              {task.title}
+              {todo.title}
             </span>
             <Badge
               variant={
-                task.priority === "high"
+                todo.priority === "high"
                   ? "destructive"
-                  : task.priority === "medium"
+                  : todo.priority === "medium"
                   ? "default"
                   : "secondary"
               }
               className="pointer-events-none h-5 rounded-sm px-1.5 text-[11px] capitalize"
             >
-              {task.priority}
+              {todo.priority}
             </Badge>
           </div>
           <div className="flex items-center justify-between text-muted-foreground text-xs">
-            {task.assignee && (
+            {todo.assignee && (
               <div className="flex items-center gap-1">
                 <div className="size-2 rounded-full bg-primary/20" />
-                <span className="line-clamp-1">{task.assignee}</span>
+                <span className="line-clamp-1">{todo.assignee}</span>
               </div>
             )}
-            {task.dueDate && (
+            {todo.dueDate && (
               <time className="text-[10px] tabular-nums">
-                {format(task.dueDate, "yy")}
+                {format(todo.dueDate, "yy")}
               </time>
             )}
           </div>
@@ -105,17 +105,17 @@ function TaskCard({ task, ...props }: TaskCardProps) {
 
 interface TaskColumnProps
   extends Omit<React.ComponentProps<typeof Kanban.Column>, "children"> {
-  tasks: Todo[];
+  todos: Todo[];
 }
 
-function TaskColumn({ value, tasks, ...props }: TaskColumnProps) {
+function TodoColumn({ value, todos, ...props }: TaskColumnProps) {
   return (
     <Kanban.Column value={value} {...props}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="font-semibold text-sm">{COLUMN_TITLES[value]}</span>
           <Badge variant="secondary" className="pointer-events-none rounded-sm">
-            {tasks.length}
+            {todos.length}
           </Badge>
         </div>
         <Kanban.ColumnHandle asChild>
@@ -125,8 +125,8 @@ function TaskColumn({ value, tasks, ...props }: TaskColumnProps) {
         </Kanban.ColumnHandle>
       </div>
       <div className="flex flex-col gap-2 p-0.5">
-        {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} asHandle />
+        {todos.map((todo) => (
+          <TodoCard key={todo.id} todo={todo} asHandle />
         ))}
       </div>
     </Kanban.Column>
