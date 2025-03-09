@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import { serializeTodos } from "@/lib/utils";
 import { UniqueIdentifier } from "@dnd-kit/core";
 import { TodoStatusTag } from "./todo-status-tag";
+import { AddTodoDialog } from "./add-todo-dialog";
 
 const COLUMN_TITLES: Record<string, string> = {
   backlog: "Backlog",
@@ -141,13 +142,7 @@ function TodoColumn({ value, todos, ...props }: TaskColumnProps) {
         {todos.map((todo) => (
           <TodoCard key={todo.id} todo={todo} asHandle />
         ))}
-        <Button
-          variant="outline"
-          className="rounded-md border p-3 shadow-xs cursor-pointer"
-        >
-          <Plus />
-          Add
-        </Button>
+        <AddTodoDialog />
       </div>
     </Kanban.Column>
   );
