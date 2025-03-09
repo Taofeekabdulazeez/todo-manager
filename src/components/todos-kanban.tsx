@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import * as Kanban from "@/components/ui/kanban";
 import { Todo } from "@/types";
-import { GripVertical } from "lucide-react";
+import { Calendar, GripVertical, Plus } from "lucide-react";
 import * as React from "react";
 import { format } from "date-fns";
 import { serializeTodos } from "@/lib/utils";
@@ -37,14 +37,12 @@ export function TodosKanban({ todos }: TodosKanbanProps) {
       value={columns}
       onValueChange={handleValueChange}
       getItemValue={(item) => item.id}
-      // onDragPending={() => console.log("Dragging is happpening")}
-      // onDragStart={() => console.log("Dragging has started")}
-      // onDragEnd={() => console.log("Dragging has ended")}
-      // onDragCancel={() => console.log("Cancelled")}
     >
       <Kanban.Board className="grid auto-rows-fr grid-cols-3">
         {Object.entries(columns).map(([columnValue, todos]) => (
-          <TodoColumn key={columnValue} value={columnValue} todos={todos} />
+          <>
+            <TodoColumn key={columnValue} value={columnValue} todos={todos} />
+          </>
         ))}
       </Kanban.Board>
       <Kanban.Overlay>
@@ -78,7 +76,7 @@ function TodoCard({ todo, ...props }: TodoCardProps) {
     <Kanban.Item key={todo.id} value={todo.id} asChild {...props}>
       <div className="rounded-md border bg-card p-3 shadow-xs">
         <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center justify-between gap-2 mb-6">
             <span className="line-clamp-1 font-medium text-sm">
               {todo.title}
             </span>
@@ -103,8 +101,8 @@ function TodoCard({ todo, ...props }: TodoCardProps) {
               </div>
             )}
             {todo.dueDate && (
-              <time className="text-[10px] tabular-nums">
-                {format(todo.dueDate, "MMMM do, yyyy")}
+              <time className="text-xs tabular-nums flex items-center gap-1">
+                <Calendar size={12} /> {format(todo.dueDate, "MMMM do, yyyy")}
               </time>
             )}
           </div>
@@ -143,6 +141,13 @@ function TodoColumn({ value, todos, ...props }: TaskColumnProps) {
         {todos.map((todo) => (
           <TodoCard key={todo.id} todo={todo} asHandle />
         ))}
+        <Button
+          variant="outline"
+          className="rounded-md border p-3 shadow-xs cursor-pointer"
+        >
+          <Plus />
+          Add
+        </Button>
       </div>
     </Kanban.Column>
   );
