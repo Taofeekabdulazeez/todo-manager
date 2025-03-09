@@ -8,6 +8,8 @@ import { GripVertical } from "lucide-react";
 import * as React from "react";
 import { format } from "date-fns";
 import { serializeTodos } from "@/lib/utils";
+import { UniqueIdentifier } from "@dnd-kit/core";
+import { TodoStatusTag } from "./todo-status-tag";
 
 const COLUMN_TITLES: Record<string, string> = {
   backlog: "Backlog",
@@ -25,11 +27,20 @@ export function TodosKanban({ todos }: TodosKanbanProps) {
     serializeTodos(todos)
   );
 
+  const handleValueChange = (cols: Record<UniqueIdentifier, Todo[]>) => {
+    console.log(cols);
+    setColumns(cols);
+  };
+
   return (
     <Kanban.Root
       value={columns}
-      onValueChange={setColumns}
+      onValueChange={handleValueChange}
       getItemValue={(item) => item.id}
+      // onDragPending={() => console.log("Dragging is happpening")}
+      // onDragStart={() => console.log("Dragging has started")}
+      // onDragEnd={() => console.log("Dragging has ended")}
+      // onDragCancel={() => console.log("Cancelled")}
     >
       <Kanban.Board className="grid auto-rows-fr grid-cols-3">
         {Object.entries(columns).map(([columnValue, todos]) => (
@@ -93,7 +104,7 @@ function TodoCard({ todo, ...props }: TodoCardProps) {
             )}
             {todo.dueDate && (
               <time className="text-[10px] tabular-nums">
-                {format(todo.dueDate, "yy")}
+                {format(todo.dueDate, "MMMM do, yyyy")}
               </time>
             )}
           </div>
@@ -109,11 +120,14 @@ interface TaskColumnProps
 }
 
 function TodoColumn({ value, todos, ...props }: TaskColumnProps) {
+  console.log(COLUMN_TITLES[value]);
   return (
     <Kanban.Column value={value} {...props}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-sm">{COLUMN_TITLES[value]}</span>
+          <span className="font-semibold text-sm">
+            {<TodoStatusTag status={COLUMN_TITLES[value]} />}
+          </span>
           <Badge variant="secondary" className="pointer-events-none rounded-sm">
             {todos.length}
           </Badge>
