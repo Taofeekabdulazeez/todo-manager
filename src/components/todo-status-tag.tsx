@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { BadgeCheck, BadgeInfo, Hourglass } from "lucide-react";
+import { Badge } from "./ui/badge";
 
 type Tag_Props = {
   status:
@@ -10,29 +11,47 @@ type Tag_Props = {
     | "retaking"
     | string;
   className?: string;
+  num_items?: number;
 };
 
-export function TodoStatusTag({ status, className }: Tag_Props) {
+export function TodoStatusTag({ status, className, num_items = 0 }: Tag_Props) {
   return (
-    <span
-      className={clsx(
-        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-2xl text-xs font-medium capitalize",
-        {
-          "bg-green-100   dark:bg-green-800 text-green-800 dark:text-green-100":
+    <div className="flex items-center gap-2">
+      <span
+        className={clsx(
+          "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-2xl text-xs font-medium capitalize",
+          {
+            "bg-green-100   dark:bg-green-800 text-green-800 dark:text-green-100":
+              status === "Done",
+            "bg-rose-100 dark:bg-rose-800 text-rose-900 dark:text-rose-100":
+              status === "pending",
+            "bg-sky-100 dark:bg-sky-800 text-sky-900 dark:text-aky-100":
+              status === "In Progress",
+            "bg-amber-100 dark:bg-amber-800 text-amber-900 dark:text-amber-100":
+              status === "Backlog",
+          },
+          className
+        )}
+      >
+        <Icon status={status} />
+        {status}
+      </span>
+      <Badge
+        variant="secondary"
+        className={clsx("pointer-events-none rounded-sm", {
+          "dark:bg-green-100  bg-green-800 darK:text-green-800 text-green-100":
             status === "Done",
-          "bg-rose-100 dark:bg-rose-800 text-rose-900 dark:text-rose-100":
-            status === "Backlog",
-          "bg-sky-100 dark:bg-sky-800 text-sky-900 dark:text-aky-100":
-            status === "In Progress",
-          "bg-amber-100 dark:bg-amber-800 text-amber-900 dark:text-amber-100":
+          "dark:bg-rose-100 bg-rose-800 dark:text-rose-900 text-rose-100":
             status === "pending",
-        },
-        className
-      )}
-    >
-      <Icon status={status} />
-      {status}
-    </span>
+          "dark:bg-sky-100 bg-sky-800 dark:text-sky-900 text-sky-100":
+            status === "In Progress",
+          "dark:bg-amber-100 bg-amber-800 dark:text-amber-900 text-amber-100":
+            status === "Backlog",
+        })}
+      >
+        {num_items}
+      </Badge>
+    </div>
   );
 }
 

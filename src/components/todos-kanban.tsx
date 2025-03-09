@@ -120,17 +120,18 @@ interface TaskColumnProps
 }
 
 function TodoColumn({ value, todos, ...props }: TaskColumnProps) {
-  console.log(COLUMN_TITLES[value]);
   return (
     <Kanban.Column value={value} {...props}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="font-semibold text-sm">
-            {<TodoStatusTag status={COLUMN_TITLES[value]} />}
+            {
+              <TodoStatusTag
+                status={COLUMN_TITLES[value]}
+                num_items={todos.length}
+              />
+            }
           </span>
-          <Badge variant="secondary" className="pointer-events-none rounded-sm">
-            {todos.length}
-          </Badge>
         </div>
         <Kanban.ColumnHandle asChild>
           <Button variant="ghost" size="icon">
