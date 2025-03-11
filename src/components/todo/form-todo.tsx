@@ -13,21 +13,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ChangeEvent, useActionState } from "react";
 import { TodoFormState, useTodoForm } from "@/hooks/useTodoForm";
-import { addTodo } from "@/server/todo.actions";
-import Loader from "./common/loader";
+import { addTodo, updateTodo } from "@/server/todo.actions";
+import Loader from "../common/loader";
+import { Todo } from "@/types";
 
 type FormTodoProps = {
+  todo?: Todo;
   closeForm?: () => void;
 };
 
-export function FormTodo({ closeForm }: FormTodoProps) {
-  const { state, dispatch, handleValueChange } = useTodoForm();
-  const [data, action, isPending] = useActionState(addTodo, state);
+export function FormTodo({ closeForm, todo = undefined }: FormTodoProps) {
+  const isEditSession = !!todo;
+  const { state, dispatch, handleValueChange } = useTodoForm(todo);
+  const [data, action, isPending] = useActionState(
+    isEditSession ? updateTodo : addTodo,
+    state
+  );
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <form action={action} className="grid gap-4 py-2">
+      <input type="text" hidden name="id" defaultValue={todo?.id} />
       <LabelInput
         name="title"
         state={state}
@@ -132,7 +139,11 @@ export function FormTodo({ closeForm }: FormTodoProps) {
           cancel
         </Button>
         <Button disabled={isPending} type="submit" className="cursor-pointer">
-          {isPending ? <Loader /> : "Add Todo"}
+          {isPending ? (
+            <Loader text={isEditSession ? "Editing" : "Adding"} />
+          ) : (
+            `${isEditSession ? "Edit" : "Add"} Todo`
+          )}
         </Button>
       </div>
     </form>

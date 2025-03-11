@@ -11,6 +11,7 @@ import { serializeTodos } from "@/lib/utils";
 import { UniqueIdentifier } from "@dnd-kit/core";
 import { TodoStatusTag } from "./todo-status-tag";
 import { AddTodoDialog } from "./add-todo-dialog";
+import { EditTodoDialog } from "./edit-todo.dialog";
 
 const COLUMN_TITLES: Record<string, string> = {
   backlog: "Backlog",
@@ -73,14 +74,19 @@ interface TodoCardProps
 }
 
 function TodoCard({ todo, ...props }: TodoCardProps) {
+  const ref = React.useRef<HTMLDivElement>(null!);
+
   return (
-    <Kanban.Item key={todo.id} value={todo.id} asChild {...props}>
+    <Kanban.Item ref={ref} key={todo.id} value={todo.id} asChild {...props}>
       <div className="rounded-md border bg-card p-3 shadow-xs">
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-2 mb-6">
-            <span className="line-clamp-1 font-medium text-sm">
-              {todo.title}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="line-clamp-1 font-medium text-sm">
+                {todo.title}
+              </span>
+              <EditTodoDialog todo={todo} ref={ref} />
+            </div>
             <Badge
               variant={
                 todo.priority === "high"

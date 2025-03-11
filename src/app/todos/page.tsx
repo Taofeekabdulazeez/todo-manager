@@ -1,12 +1,14 @@
-import Loader from "@/components/common/loader";
-import Todos from "@/components/todos";
+import Todos from "@/components/todo/todos";
+import { TodosKanbanLoader } from "@/components/todo/todos-kanban-loader";
 import React, { Suspense } from "react";
 
 export default function Todospage() {
   return (
     <div className="px-6">
-      <h1 className="text-xl text-center font-bold mb-12">Todos Kanban</h1>
-      <Suspense fallback={<Loader />}>
+      <h1 className="text-xl text-center font-bold mb-12 mt-3 uppercase">
+        Todos
+      </h1>
+      <Suspense fallback={<TodosKanbanLoader />}>
         <Todos />
       </Suspense>
     </div>

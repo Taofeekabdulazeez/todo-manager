@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { BadgeCheck, BadgeInfo, Hourglass } from "lucide-react";
-import { Badge } from "./ui/badge";
+import { Badge } from "../ui/badge";
 
 type Tag_Props = {
   status:

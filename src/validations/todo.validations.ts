@@ -1,6 +1,8 @@
 import { TodoFormData } from "@/hooks/useTodoForm";
 
-export const validateTodoFormData = (state: TodoFormData) => {
+export const validateTodoFormData = (
+  state: Partial<Omit<TodoFormData, "id">>
+) => {
   const errors: Record<keyof typeof state, string | null> = {
     title: null,
     description: null,
@@ -22,14 +24,14 @@ export const validateTodoFormData = (state: TodoFormData) => {
   const priorities: (typeof state)["priority"][] = ["low", "medium", "high"];
 
   textFields.forEach((field) => {
-    if (!state[field] || state[field] === "")
+    if (!state?.[field] || state?.[field] === "")
       errors[field] = `${capitalizeStr(field)} cannot be empty`;
   });
 
-  if (!(state.dueDate instanceof Date))
+  if (!(state?.dueDate instanceof Date))
     errors.dueDate = "Please select a Due date";
 
-  if (!priorities.includes(state.priority))
+  if (!priorities.includes(state?.priority))
     errors.priority = "Priority can be only Low, Medium or High";
 
   return {

@@ -1,6 +1,8 @@
+import { Todo } from "@/types";
 import { ChangeEvent, useReducer } from "react";
 
 export type TodoFormData = {
+  id?: number;
   title: string;
   description: string;
   assignee: string;
@@ -11,7 +13,7 @@ export type TodoFormData = {
 
 export interface TodoFormState {
   data: TodoFormData;
-  errors: Record<keyof TodoFormData, string | null>;
+  errors: Record<keyof Omit<TodoFormData, "id">, string | null>;
 }
 
 type Action =
@@ -24,6 +26,7 @@ type Action =
 
 const initialState: TodoFormState = {
   data: {
+    id: null!,
     title: "",
     description: "",
     assignee: "",
@@ -60,14 +63,22 @@ function reducer(state: TodoFormState, action: Action): TodoFormState {
   }
 }
 
-export function useTodoForm() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+export function useTodoForm(todo?: Todo) {
+  const initialValue: TodoFormState = {
+    errors: initialState.errors,
+    data: todo!,
+  };
+  const [state, dispatch] = useReducer(
+    reducer,
+    todo ? initialValue : initialState
+  );
 
-  const handleValueChange = (event: ChangeEvent<HTMLInputElement>) =>
+  const handleValueChange = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch({
       type: "set/input-value",
       payload: { key: event.target.name, value: event.target.value },
     });
+  };
 
   return { state, dispatch, handleValueChange };
 }
