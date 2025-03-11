@@ -1,12 +1,17 @@
 import { ChangeEvent, useReducer } from "react";
 
-export interface TodoFormState {
+export type TodoFormData = {
   title: string;
   description: string;
   assignee: string;
   dueDate: Date;
   priority: "low" | "medium" | "high";
   status: string;
+};
+
+export interface TodoFormState {
+  data: TodoFormData;
+  errors: Record<keyof TodoFormData, string | null>;
 }
 
 type Action =
@@ -18,22 +23,38 @@ type Action =
   | { type: "set/priority"; payload: "low" | "medium" | "high" };
 
 const initialState: TodoFormState = {
-  title: "",
-  description: "",
-  assignee: "",
-  dueDate: new Date(),
-  priority: "low",
-  status: "backlog",
+  data: {
+    title: "",
+    description: "",
+    assignee: "",
+    dueDate: new Date(),
+    priority: "low",
+    status: "backlog",
+  },
+  errors: {
+    title: null,
+    description: null,
+    assignee: null,
+    dueDate: null,
+    priority: null,
+    status: null,
+  },
 };
 
 function reducer(state: TodoFormState, action: Action): TodoFormState {
   switch (action.type) {
     case "set/input-value":
-      return { ...state, [action.payload.key]: action.payload.value };
+      return {
+        ...state,
+        data: { ...state.data, [action.payload.key]: action.payload.value },
+      };
     case "set/due-date":
-      return { ...state, dueDate: action.payload };
+      return {
+        ...state,
+        data: { ...state.data, dueDate: action.payload },
+      };
     case "set/priority":
-      return { ...state, priority: action.payload };
+      return { ...state, data: { ...state.data, priority: action.payload } };
     default:
       return state;
   }

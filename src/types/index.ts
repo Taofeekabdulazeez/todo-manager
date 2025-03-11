@@ -7,9 +7,9 @@ export type ApiResponse<T = object> = {
 export type Todo = {
   id: number;
   title: string;
-  descripton: string;
+  description: string;
   assignee: string;
-  priority: string;
+  priority: "low" | "medium" | "high";
   status: string;
   dueDate: Date;
   createdAt: Date;

@@ -11,8 +11,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ChangeEvent, FormEvent } from "react";
+import { ChangeEvent, useActionState } from "react";
 import { TodoFormState, useTodoForm } from "@/hooks/useTodoForm";
+import { addTodo } from "@/server/todo.actions";
+import Loader from "./common/loader";
 
 type FormTodoProps = {
   closeForm?: () => void;
@@ -20,26 +22,40 @@ type FormTodoProps = {
 
 export function FormTodo({ closeForm }: FormTodoProps) {
   const { state, dispatch, handleValueChange } = useTodoForm();
+  const [data, action, isPending] = useActionState(addTodo, state);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log(state);
-    // closeForm?.();
-  };
+  console.log(data);
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-4 py-2">
-      <LabelInput name="title" state={state} onChange={handleValueChange} />
+    <form action={action} className="grid gap-4 py-2">
+      <LabelInput
+        name="title"
+        state={state}
+        onChange={handleValueChange}
+        errorMessage={data?.errors?.title}
+      />
       <LabelInput
         name="description"
         state={state}
         onChange={handleValueChange}
+        errorMessage={data?.errors?.description}
       />
-      <LabelInput name="assignee" state={state} onChange={handleValueChange} />
+      <LabelInput
+        name="assignee"
+        state={state}
+        onChange={handleValueChange}
+        errorMessage={data?.errors?.assignee}
+      />
       <div className="grid grid-cols-4 items-center gap-4">
         <Label htmlFor="dueDate" className="text-right">
           Due Date
         </Label>
+        <input
+          type="text"
+          hidden
+          name="dueDate"
+          defaultValue={state.data.dueDate as unknown as string}
+        />
         <Popover>
           <PopoverTrigger asChild>
             <Button
@@ -47,21 +63,21 @@ export function FormTodo({ closeForm }: FormTodoProps) {
               variant={"outline"}
               className={cn(
                 "w-[280px] justify-start text-left font-normal",
-                !state.dueDate && "text-muted-foreground"
+                !state.data.dueDate && "text-muted-foreground"
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {state.dueDate ? (
-                format(state.dueDate, "PPP")
+              {state.data.dueDate ? (
+                format(state.data.dueDate, "PPP")
               ) : (
-                <span>Pick a state.date</span>
+                <span>Pick a date</span>
               )}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0">
             <Calendar
               mode="single"
-              selected={state.dueDate}
+              selected={state.data.dueDate}
               onSelect={(date) =>
                 dispatch({ type: "set/due-date", payload: date! })
               }
@@ -75,6 +91,7 @@ export function FormTodo({ closeForm }: FormTodoProps) {
           Priority
         </Label>
         <RadioGroup
+          value={state.data.priority}
           onValueChange={(value) =>
             dispatch({
               type: "set/priority",
@@ -84,6 +101,12 @@ export function FormTodo({ closeForm }: FormTodoProps) {
           defaultValue="medium"
           className="flex items-center justify-between mt-2"
         >
+          <input
+            type="text"
+            hidden
+            name="priority"
+            defaultValue={state.data.priority}
+          />
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="low" id="r1" />
             <Label htmlFor="r1">Low</Label>
@@ -97,6 +120,7 @@ export function FormTodo({ closeForm }: FormTodoProps) {
             <Label htmlFor="r3">High</Label>
           </div>
         </RadioGroup>
+        {/* <input type="text" hidden name="status" value={"backlog"} /> */}
       </div>
       <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end mt-4">
         <Button
@@ -107,8 +131,8 @@ export function FormTodo({ closeForm }: FormTodoProps) {
         >
           cancel
         </Button>
-        <Button type="submit" className="cursor-pointer">
-          Add Todo
+        <Button disabled={isPending} type="submit" className="cursor-pointer">
+          {isPending ? <Loader /> : "Add Todo"}
         </Button>
       </div>
     </form>
@@ -120,21 +144,36 @@ type LabelInputProps = {
   name: "title" | "description" | "assignee";
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   label?: string;
+  errorMessage?: string | null;
 };
 
-function LabelInput({ state, name, onChange, label }: LabelInputProps) {
+function LabelInput({
+  state,
+  name,
+  onChange,
+  label,
+  errorMessage,
+}: LabelInputProps) {
   return (
-    <div className="grid grid-cols-4 items-center gap-4">
-      <Label htmlFor={name} className="text-right capitalize">
-        {label ? label : name}
-      </Label>
-      <Input
-        value={state[name]}
-        id={name}
-        name={name}
-        className="col-span-3"
-        onChange={onChange}
-      />
+    <div>
+      <div className="grid grid-cols-4 items-center gap-4">
+        <Label htmlFor={name} className="text-right capitalize">
+          {label ? label : name}
+        </Label>
+        <Input
+          value={state.data[name]}
+          id={name}
+          name={name}
+          className="col-span-3"
+          onChange={onChange}
+        />
+      </div>
+      {errorMessage && (
+        <div className="grid grid-cols-[1fr_3fr] items-center gap-4 mt-2">
+          <span></span>
+          <span className="text-xs text-red-600">{errorMessage}</span>
+        </div>
+      )}
     </div>
   );
 }

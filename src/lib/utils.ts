@@ -21,3 +21,7 @@ export function serializeTodos(data: Todo[]) {
 
   return todos;
 }
+
+export async function wait(secs = 3000) {
+  return await new Promise((resolve) => setTimeout(resolve, secs));
+}

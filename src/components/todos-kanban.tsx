@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import * as Kanban from "@/components/ui/kanban";
 import { Todo } from "@/types";
-import { Calendar, GripVertical, Plus } from "lucide-react";
+import { Calendar, GripVertical } from "lucide-react";
 import * as React from "react";
 import { format } from "date-fns";
 import { serializeTodos } from "@/lib/utils";
