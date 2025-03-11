@@ -2,7 +2,7 @@
 
 import { TodoFormData, TodoFormState } from "@/hooks/useTodoForm";
 import { ApiResponse, Todo } from "@/types";
-import { validateTodoForm } from "@/validations/todo.validations";
+import { validateTodoFormData } from "@/validations/todo.validations";
 import axios from "axios";
 import { revalidatePath } from "next/cache";
 
@@ -37,7 +37,7 @@ export const addTodo = async (
 
   console.log(data);
 
-  const validation = validateTodoForm(data);
+  const validation = validateTodoFormData(data);
   console.log(validation.success);
 
   if (!validation.success) return { data, errors: validation.errors };

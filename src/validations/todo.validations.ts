@@ -1,6 +1,6 @@
 import { TodoFormData } from "@/hooks/useTodoForm";
 
-export const validateTodoForm = (state: TodoFormData) => {
+export const validateTodoFormData = (state: TodoFormData) => {
   const errors: Record<keyof typeof state, string | null> = {
     title: null,
     description: null,
