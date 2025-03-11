@@ -1,7 +1,7 @@
 "use server";
 
 import { API_URL } from "@/constants";
-import { TodoFormData, TodoFormState } from "@/hooks/useTodoForm";
+import { TodoFormState } from "@/hooks/useTodoForm";
 import { ApiResponse, Todo } from "@/types";
 import { validateTodoFormData } from "@/validations/todo.validations";
 import axios from "axios";
@@ -16,29 +16,11 @@ export const fetchTodos = async () => {
   return todos;
 };
 
-export const addTodo = async (
-  prevState: TodoFormState,
-  formData: FormData
-): Promise<TodoFormState> => {
-  const title = formData.get("title") as string;
-  const description = formData.get("description") as string;
-  const assignee = formData.get("assignee") as string;
-  const dueDate = formData.get("dueDate") as string;
-  const priority = formData.get("priority") as TodoFormData["priority"];
-
-  const data: TodoFormData = {
-    title,
-    description,
-    assignee,
-    dueDate: new Date(dueDate),
-    priority,
-    status: prevState.data.status,
-  };
-
+export const addTodo = async ({
+  data,
+}: TodoFormState): Promise<TodoFormState> => {
   console.log(data);
-
   const validation = validateTodoFormData(data);
-  console.log(validation.success);
 
   if (!validation.success) return { data, errors: validation.errors };
 
@@ -54,31 +36,13 @@ export const addTodo = async (
   }
 };
 
-export const updateTodo = async (
-  prevState: TodoFormState,
-  formData: FormData
-) => {
-  const id = formData.get("id") as string;
-  const title = formData.get("title") as string;
-  const description = formData.get("description") as string;
-  const assignee = formData.get("assignee") as string;
-  const dueDate = formData.get("dueDate") as string;
-  const priority = formData.get("priority") as TodoFormData["priority"];
-
-  const data: TodoFormData = {
-    title,
-    description,
-    assignee,
-    dueDate: new Date(dueDate),
-    priority,
-    status: prevState.data.status,
-  };
-
+export const updateTodo = async ({ data }: TodoFormState) => {
   const validation = validateTodoFormData(data);
+  console.log(validation.success, validation.errors);
 
   if (!validation.success) return { data, errors: validation.errors };
 
-  const { dueDate: due_date, ...payload } = data;
+  const { id, dueDate: due_date, ...payload } = data;
   format(due_date, "yyyy-MM-dd");
 
   try {

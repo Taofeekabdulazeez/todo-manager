@@ -28,7 +28,7 @@ export const validateTodoFormData = (
       errors[field] = `${capitalizeStr(field)} cannot be empty`;
   });
 
-  if (!(state?.dueDate instanceof Date))
+  if (!(state?.dueDate instanceof Date) && !state?.dueDate)
     errors.dueDate = "Please select a Due date";
 
   if (!priorities.includes(state?.priority))

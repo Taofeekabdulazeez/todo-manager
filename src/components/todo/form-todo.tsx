@@ -26,11 +26,9 @@ export function FormTodo({ closeForm, todo = undefined }: FormTodoProps) {
   const isEditSession = !!todo;
   const { state, dispatch, handleValueChange } = useTodoForm(todo);
   const [data, action, isPending] = useActionState(
-    isEditSession ? updateTodo : addTodo,
+    isEditSession ? updateTodo.bind(null, state) : addTodo.bind(null, state),
     state
   );
-
-  // console.log(data);
 
   return (
     <form action={action} className="grid gap-4 py-2">
@@ -177,6 +175,7 @@ function LabelInput({
           name={name}
           className="col-span-3"
           onChange={onChange}
+          autoComplete="off"
         />
       </div>
       {errorMessage && (
