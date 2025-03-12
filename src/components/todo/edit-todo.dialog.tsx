@@ -46,7 +46,7 @@ export function EditTodoDialog({ todo, ref }: EditTodoDialogProps) {
             Add info to the fields. Click save when you are done.
           </DialogDescription>
         </DialogHeader>
-        <FormTodo todo={todo} closeForm={closeDialog} />
+        <FormTodo todo={todo} closeFormDialog={closeDialog} />
         {/* <DialogFooter></DialogFooter> */}
       </DialogContent>
     </Dialog>

@@ -1,16 +1,15 @@
-import Todos from "@/components/todo/todos";
-import { TodosKanbanLoader } from "@/components/todo/todos-kanban-loader";
-import React, { Suspense } from "react";
+import { TodosKanban } from "@/components/todo/todos-kanban";
+import { fetchTodos } from "@/server/todo.actions";
 
-export default function Todospage() {
+export default async function Todospage() {
+  const todos = await fetchTodos();
+
   return (
     <div className="px-6">
       <h1 className="text-xl text-center font-bold mb-12 mt-3 uppercase">
         Todos
       </h1>
-      <Suspense fallback={<TodosKanbanLoader />}>
-        <Todos />
-      </Suspense>
+      <TodosKanban todos={todos} />
     </div>
   );
 }

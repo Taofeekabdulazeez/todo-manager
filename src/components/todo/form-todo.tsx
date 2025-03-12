@@ -11,24 +11,37 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ChangeEvent, useActionState } from "react";
+import { ChangeEvent, useActionState, useEffect } from "react";
 import { TodoFormState, useTodoForm } from "@/hooks/useTodoForm";
 import { addTodo, updateTodo } from "@/server/todo.actions";
 import Loader from "../common/loader";
 import { Todo } from "@/types";
+import { toast } from "sonner";
 
 type FormTodoProps = {
   todo?: Todo;
-  closeForm?: () => void;
+  closeFormDialog?: () => void;
 };
 
-export function FormTodo({ closeForm, todo = undefined }: FormTodoProps) {
+export function FormTodo({ closeFormDialog, todo = undefined }: FormTodoProps) {
   const isEditSession = !!todo;
   const { state, dispatch, handleValueChange } = useTodoForm(todo);
-  const [data, action, isPending] = useActionState(
-    isEditSession ? updateTodo.bind(null, state) : addTodo.bind(null, state),
+  const [response, action, isPending] = useActionState(
+    isEditSession
+      ? updateTodo.bind(null, state.data)
+      : addTodo.bind(null, state.data),
     state
   );
+
+  useEffect(() => {
+    if (!response.message) return;
+
+    if (response.status === 200)
+      toast.success(response.message, { id: response.data.id });
+    else toast.error(response.message, { id: response.data.id });
+
+    closeFormDialog?.();
+  }, [response, closeFormDialog]);
 
   return (
     <form action={action} className="grid gap-4 py-2">
@@ -37,19 +50,19 @@ export function FormTodo({ closeForm, todo = undefined }: FormTodoProps) {
         name="title"
         state={state}
         onChange={handleValueChange}
-        errorMessage={data?.errors?.title}
+        errorMessage={response?.errors?.title}
       />
       <LabelInput
         name="description"
         state={state}
         onChange={handleValueChange}
-        errorMessage={data?.errors?.description}
+        errorMessage={response?.errors?.description}
       />
       <LabelInput
         name="assignee"
         state={state}
         onChange={handleValueChange}
-        errorMessage={data?.errors?.assignee}
+        errorMessage={response?.errors?.assignee}
       />
       <div className="grid grid-cols-4 items-center gap-4">
         <Label htmlFor="dueDate" className="text-right">
@@ -130,7 +143,7 @@ export function FormTodo({ closeForm, todo = undefined }: FormTodoProps) {
       <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end mt-4">
         <Button
           type="button"
-          onClick={closeForm}
+          onClick={closeFormDialog}
           variant="outline"
           className="cursor-pointer"
         >

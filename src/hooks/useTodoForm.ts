@@ -13,6 +13,8 @@ export type TodoFormData = {
 
 export interface TodoFormState {
   data: TodoFormData;
+  message?: string;
+  status?: number;
   errors: Record<keyof Omit<TodoFormData, "id">, string | null>;
 }
 
@@ -42,6 +44,8 @@ const initialState: TodoFormState = {
     priority: null,
     status: null,
   },
+  message: undefined,
+  status: undefined,
 };
 
 function reducer(state: TodoFormState, action: Action): TodoFormState {

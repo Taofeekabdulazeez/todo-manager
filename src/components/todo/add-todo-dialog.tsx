@@ -29,7 +29,7 @@ export function AddTodoDialog() {
             Add info to the fields. Click save when you are done.
           </DialogDescription>
         </DialogHeader>
-        <FormTodo closeForm={closeDialog} />
+        <FormTodo closeFormDialog={closeDialog} />
         {/* <DialogFooter></DialogFooter> */}
       </DialogContent>
     </Dialog>

@@ -1,6 +1,5 @@
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -12,25 +11,31 @@ import {
 import { Button } from "@/components/ui/button";
 import { deleteTodo } from "@/server/todo.actions";
 import { Trash2 } from "lucide-react";
-import { useActionState } from "react";
+import { useActionState, startTransition, useEffect, useState } from "react";
 import Loader from "../common/loader";
+import { toast } from "sonner";
 
 type DeleteTodoDialogProps = {
   id: number;
 };
 
 export function DeleteTodoDialog({ id }: DeleteTodoDialogProps) {
-  const [data, action, isPending] = useActionState(
+  const [open, setOpen] = useState(false);
+  const closeDialog = () => setOpen(false);
+  const [data, action, isDeleting] = useActionState(
     deleteTodo.bind(null, id),
     null
   );
 
-  console.log(isPending);
-
-  console.log(data);
+  useEffect(() => {
+    if (data?.message) {
+      closeDialog();
+      toast(data.message);
+    }
+  }, [data]);
 
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <Button type="button" variant="ghost" size="icon">
           <Trash2
@@ -46,15 +51,17 @@ export function DeleteTodoDialog({ id }: DeleteTodoDialogProps) {
             This action cannot be undone. This will permanently delete your
             account and remove your data from our servers.
           </AlertDialogDescription>
+          <span>{data?.message}</span>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel type="button">Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            disabled={isPending}
-            onClick={async () => action()}
+          <Button
+            variant="destructive"
+            disabled={isDeleting}
+            onClick={() => startTransition(action)}
           >
-            {isPending ? <Loader text="Deleting" /> : "Delete"}
-          </AlertDialogAction>
+            {isDeleting ? <Loader text="Deleting" /> : "Delete"}
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

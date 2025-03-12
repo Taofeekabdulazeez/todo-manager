@@ -43,9 +43,7 @@ export function TodosKanban({ todos }: TodosKanbanProps) {
     >
       <Kanban.Board className="grid auto-rows-fr grid-cols-3">
         {Object.entries(columns).map(([columnValue, todos]) => (
-          <>
-            <TodoColumn key={columnValue} value={columnValue} todos={todos} />
-          </>
+          <TodoColumn key={columnValue} value={columnValue} todos={todos} />
         ))}
       </Kanban.Board>
       <Kanban.Overlay>
