@@ -30,9 +30,9 @@ export function DeleteTodoDialog({ id }: DeleteTodoDialogProps) {
   useEffect(() => {
     if (data?.message) {
       closeDialog();
-      toast(data.message);
+      toast.success(data.message, { id });
     }
-  }, [data]);
+  }, [data, id]);
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>

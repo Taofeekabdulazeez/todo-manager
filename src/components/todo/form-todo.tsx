@@ -194,7 +194,9 @@ function LabelInput({
       {errorMessage && (
         <div className="grid grid-cols-[1fr_3fr] items-center gap-4 mt-2">
           <span></span>
-          <span className="text-xs text-red-600">{errorMessage}</span>
+          <span className="text-xs text-destructive-foreground">
+            {errorMessage}
+          </span>
         </div>
       )}
     </div>

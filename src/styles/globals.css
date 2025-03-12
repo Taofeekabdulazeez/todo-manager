@@ -147,6 +147,14 @@
   transform: translateX(-50%);
 }
 
+.dark .time-loader::after {
+  /* border: 1.2px solid #dce6eb; */
+}
+
+.dark .time-loader {
+  background: #bedeef;
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);

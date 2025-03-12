@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "@/styles/globals.css";
-import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import AppToaster from "@/components/shared/app-toaster";
 
 const geistSans = Montserrat({
   subsets: ["latin"],
@@ -35,8 +35,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <AppToaster />
         </ThemeProvider>
-        <Toaster />
       </body>
     </html>
   );

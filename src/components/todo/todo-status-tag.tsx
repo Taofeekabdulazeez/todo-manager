@@ -25,7 +25,7 @@ export function TodoStatusTag({ status, className, num_items = 0 }: Tag_Props) {
               status === "Done",
             "bg-rose-100 dark:bg-rose-800 text-rose-900 dark:text-rose-100":
               status === "pending",
-            "bg-sky-100 dark:bg-sky-800 text-sky-900 dark:text-aky-100":
+            "bg-sky-100 dark:bg-sky-800 text-sky-900 dark:text-sky-100":
               status === "In Progress",
             "bg-amber-100 dark:bg-amber-800 text-amber-900 dark:text-amber-100":
               status === "Backlog",
@@ -39,7 +39,7 @@ export function TodoStatusTag({ status, className, num_items = 0 }: Tag_Props) {
       <Badge
         variant="secondary"
         className={clsx("pointer-events-none rounded-sm", {
-          "dark:bg-green-100  bg-green-800 darK:text-green-800 text-green-100":
+          "dark:bg-green-100 bg-green-800 dark:text-green-800 text-green-100":
             status === "Done",
           "dark:bg-rose-100 bg-rose-800 dark:text-rose-900 text-rose-100":
             status === "pending",
