@@ -12,6 +12,7 @@ import { UniqueIdentifier } from "@dnd-kit/core";
 import { TodoStatusTag } from "./todo-status-tag";
 import { AddTodoDialog } from "./add-todo-dialog";
 import { EditTodoDialog } from "./edit-todo.dialog";
+import { DeleteTodoDialog } from "./delete-todo-dialog";
 
 const COLUMN_TITLES: Record<string, string> = {
   backlog: "Backlog",
@@ -86,6 +87,7 @@ function TodoCard({ todo, ...props }: TodoCardProps) {
                 {todo.title}
               </span>
               <EditTodoDialog todo={todo} ref={ref} />
+              <DeleteTodoDialog id={todo.id} />
             </div>
             <Badge
               variant={

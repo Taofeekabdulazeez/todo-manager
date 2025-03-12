@@ -51,7 +51,6 @@ export const updateTodo = async ({ data }: TodoFormState) => {
       payload
     );
     const result = response.data.data as Todo;
-    console.log("API RESPONSE ===> ", result);
     return { data: result, errors: null! };
   } catch (error) {
     console.log(error);
