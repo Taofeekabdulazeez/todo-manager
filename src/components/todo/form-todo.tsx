@@ -35,7 +35,6 @@ export function FormTodo({ closeFormDialog, todo = undefined }: FormTodoProps) {
 
   useEffect(() => {
     if (!response.message) return;
-    console.log(response);
 
     if (response.status === 200)
       toast.success(response.message, { id: response.data?.id });
