@@ -13,6 +13,7 @@ import { TodoStatusTag } from "./todo-status-tag";
 import { AddTodoDialog } from "./add-todo-dialog";
 import { EditTodoDialog } from "./edit-todo.dialog";
 import { DeleteTodoDialog } from "./delete-todo-dialog";
+import { TodoColumnProvider } from "./todo-column-context";
 
 const COLUMN_TITLES: Record<string, string> = {
   backlog: "Backlog",
@@ -149,7 +150,9 @@ function TodoColumn({ value, todos, ...props }: TaskColumnProps) {
         {todos.map((todo) => (
           <TodoCard key={todo.id} todo={todo} asHandle />
         ))}
-        <AddTodoDialog />
+        <TodoColumnProvider status={COLUMN_TITLES[value]}>
+          <AddTodoDialog />
+        </TodoColumnProvider>
       </div>
     </Kanban.Column>
   );

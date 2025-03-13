@@ -10,7 +10,7 @@ export type Todo = {
   description: string;
   assignee: string;
   priority: "low" | "medium" | "high";
-  status: string;
+  status: "backlog" | "inProgress" | "done";
   dueDate: Date;
   createdAt: Date;
 };

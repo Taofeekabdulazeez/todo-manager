@@ -30,7 +30,6 @@ export function AddTodoDialog() {
           </DialogDescription>
         </DialogHeader>
         <FormTodo closeFormDialog={closeDialog} />
-        {/* <DialogFooter></DialogFooter> */}
       </DialogContent>
     </Dialog>
   );

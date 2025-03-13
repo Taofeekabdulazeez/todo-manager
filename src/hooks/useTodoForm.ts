@@ -1,5 +1,6 @@
+import { TodoColumnContext } from "@/components/todo/todo-column-context";
 import { Todo } from "@/types";
-import { ChangeEvent, useReducer } from "react";
+import { ChangeEvent, use, useReducer } from "react";
 
 export type TodoFormData = {
   id?: number;
@@ -8,7 +9,7 @@ export type TodoFormData = {
   assignee: string;
   dueDate: Date;
   priority: "low" | "medium" | "high";
-  status: string;
+  status: "backlog" | "inProgress" | "done";
 };
 
 export interface TodoFormState {
@@ -72,9 +73,16 @@ export function useTodoForm(todo?: Todo) {
     errors: initialState.errors,
     data: todo!,
   };
+  const context = use(TodoColumnContext);
+
   const [state, dispatch] = useReducer(
     reducer,
-    todo ? initialValue : initialState
+    todo
+      ? initialValue
+      : {
+          ...initialState,
+          data: { ...initialState.data, status: context.status },
+        }
   );
 
   const handleValueChange = (event: ChangeEvent<HTMLInputElement>) => {
