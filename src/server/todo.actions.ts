@@ -11,6 +11,7 @@ import { revalidatePath } from "next/cache";
 export const fetchTodos = async () => {
   const response = await http.get<Todo[]>(`${API_URL}/todos`);
   const todos = response.data;
+  console.log(`${todos.length} left`);
 
   return todos ?? [];
 };

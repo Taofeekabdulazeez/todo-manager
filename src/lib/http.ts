@@ -15,7 +15,9 @@ class Http {
   }
 
   public async get<T>(url: string) {
-    const response = await fetch(url, { method: "GET" });
+    const response = await fetch(url, {
+      method: "GET",
+    });
     const result = await response.json();
 
     return result as ApiResponse<T>;

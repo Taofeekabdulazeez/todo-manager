@@ -26,13 +26,14 @@ type TodosKanbanProps = {
 };
 
 export function TodosKanban({ todos }: TodosKanbanProps) {
-  const [columns, setColumns] = React.useState<Record<string, Todo[]>>(
-    serializeTodos(todos)
-  );
+  const values = React.useMemo(() => serializeTodos(todos), [todos]);
+  const [columns, setColumns] = React.useState<Record<string, Todo[]>>(values);
 
-  const handleValueChange = (cols: Record<UniqueIdentifier, Todo[]>) => {
-    console.log(cols);
-    setColumns(cols);
+  React.useEffect(() => setColumns(values), [values]);
+
+  const handleValueChange = (columns: Record<UniqueIdentifier, Todo[]>) => {
+    console.log(columns);
+    setColumns(columns);
   };
 
   return (
