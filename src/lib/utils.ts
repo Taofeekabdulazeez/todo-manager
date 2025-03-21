@@ -26,7 +26,8 @@ export async function wait(secs = 3000) {
   return await new Promise((resolve) => setTimeout(resolve, secs));
 }
 
-export function formatCustomDate(date: Date): string {
+export function formatCustomDate(inputdate: Date): string {
+  const date = new Date(inputdate);
   const months: string[] = [
     "January",
     "February",
@@ -42,7 +43,7 @@ export function formatCustomDate(date: Date): string {
     "December",
   ];
 
-  const day: number = date.getDate();
+  const day: number = date.getDay();
   const year: number = date.getFullYear();
   const monthName: string = months[date.getMonth()];
   const dayWithSuffix: string = getDayWithSuffix(day);
