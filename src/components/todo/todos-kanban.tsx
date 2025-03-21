@@ -6,8 +6,7 @@ import * as Kanban from "@/components/ui/kanban";
 import { Todo } from "@/types";
 import { Calendar, GripVertical } from "lucide-react";
 import * as React from "react";
-import { format } from "date-fns";
-import { serializeTodos } from "@/lib/utils";
+import { formatCustomDate, serializeTodos } from "@/lib/utils";
 import { UniqueIdentifier } from "@dnd-kit/core";
 import { TodoStatusTag } from "./todo-status-tag";
 import { AddTodoDialog } from "./add-todo-dialog";
@@ -111,7 +110,7 @@ function TodoCard({ todo, ...props }: TodoCardProps) {
             )}
             {todo.dueDate && (
               <time className="text-xs tabular-nums flex items-center gap-1">
-                <Calendar size={12} /> {format(todo.dueDate, "MMMM do, yyyy")}
+                <Calendar size={12} /> {formatCustomDate(todo.dueDate)}
               </time>
             )}
           </div>

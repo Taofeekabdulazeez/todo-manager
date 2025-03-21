@@ -5,7 +5,6 @@ import { TodoFormData, TodoFormState } from "@/hooks/useTodoForm";
 import http from "@/lib/http";
 import { ApiResponse, Todo } from "@/types";
 import { validateTodoFormData } from "@/validations/todo.validations";
-import { format } from "date-fns";
 import { revalidatePath } from "next/cache";
 
 export const fetchTodos = async () => {
@@ -45,7 +44,7 @@ export const updateTodo = async (
   if (!validation.success) return { data, errors: validation.errors };
 
   const { id, dueDate: due_date, ...payload } = data;
-  format(due_date, "yyyy-MM-dd");
+  console.log(due_date);
 
   try {
     const response = await http.patch<Todo>(`${API_URL}/todos/${id}`, payload);

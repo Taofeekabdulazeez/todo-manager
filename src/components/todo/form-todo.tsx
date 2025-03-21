@@ -1,6 +1,5 @@
-import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatCustomDate } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -86,7 +85,7 @@ export function FormTodo({ closeFormDialog, todo = undefined }: FormTodoProps) {
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {state.data.dueDate ? (
-                format(state.data.dueDate, "PPP")
+                formatCustomDate(state.data.dueDate)
               ) : (
                 <span>Pick a date</span>
               )}
