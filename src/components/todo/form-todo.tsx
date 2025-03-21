@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ChangeEvent, useActionState, useEffect } from "react";
+import { useActionState, useEffect, ComponentProps } from "react";
 import { TodoFormState, useTodoForm } from "@/hooks/useTodoForm";
 import { addTodo, updateTodo } from "@/server/todo.actions";
 import Loader from "../common/loader";
@@ -161,21 +161,16 @@ export function FormTodo({ closeFormDialog, todo = undefined }: FormTodoProps) {
   );
 }
 
-type LabelInputProps = {
+interface LabelInputProps extends ComponentProps<"input"> {
   state: TodoFormState;
   name: "title" | "description" | "assignee";
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  // onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   label?: string;
   errorMessage?: string | null;
-};
+}
 
-function LabelInput({
-  state,
-  name,
-  onChange,
-  label,
-  errorMessage,
-}: LabelInputProps) {
+function LabelInput(props: LabelInputProps) {
+  const { name, state, onChange, label, errorMessage, ...inputProps } = props;
   return (
     <div>
       <div className="grid grid-cols-4 items-center gap-4">
@@ -186,6 +181,7 @@ function LabelInput({
           value={state.data[name]}
           id={name}
           name={name}
+          {...inputProps}
           className="col-span-3"
           onChange={onChange}
           autoComplete="off"
